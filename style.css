@@ -1,0 +1,8 @@
+body {
+    background-color: aliceblue;
+}
+
+.project-container {
+    border: 1px solid red;
+    display: inline-block;
+}

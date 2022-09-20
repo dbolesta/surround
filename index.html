@@ -5,18 +5,116 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surround Is Around</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script type="module">
+        import * as prismic from 'https://cdn.skypack.dev/@prismicio/client';
+        import * as prismicH from 'https://cdn.skypack.dev/@prismicio/helpers';
+  
+        const repoName = 'surround';
+        const endpoint = prismic.getEndpoint(repoName);
+        const client = prismic.createClient(endpoint);
+  
+
+        let data = {
+            'comms': [],
+            'musicVids': []
+        };
+
+
+
+        const init = async () => {
+          const prismicDoc = await client.getFirst();
+
+            const res = await client.get();
+
+
+
+            res.results.forEach(proj => {
+                if (proj.data.type === "Advertisement"){
+                    data.comms.push(proj);
+                } else if (proj.data.type === "Music Video"){
+                    data.musicVids.push(proj);
+                }
+                // data.push(proj);
+            });
+            
+
+        //   const { title, description } = prismicDoc.data;
+        //   const titleHTML = prismicH.asHTML(title);
+        //   const descriptionHTML = prismicH.asHTML(description);
+        //   const container = document.getElementById('container');
+        //   container.innerHTML = titleHTML + descriptionHTML;
+            console.log(data);
+
+            // setTimeout(constructData, 1000);
+            constructData();
+        }
+  
+        init();
+
+        const constructData = async () => {
+
+            const musicContainer = document.querySelector('.musicSection');
+            const commContainer = document.querySelector('.commSection');
+
+            data.comms.forEach(adProj => {
+                console.log("what is adProj");
+                console.log(adProj);
+                const { title, description, medialink } = adProj.data;
+
+
+                let div = document.createElement('div');
+                div.className = "project-container";
+                div.innerHTML = `<h4>${title[0].text}</h4><p>${description[0].text}</p><p><a href="${medialink.url}" target="_blank">Check it out</a></p>`;
+                commContainer.appendChild(div);
+            });
+
+            data.musicVids.forEach(musicProj => {
+                console.log("what is adProj");
+                console.log(musicProj);
+                const { title, description, medialink } = musicProj.data;
+
+
+                let div = document.createElement('div');
+                div.className = "project-container";
+                div.innerHTML = `<h4>${title[0].text}</h4><p>${description[0].text}</p><p><a href="${medialink.url}" target="_blank">Check it out</a></p>`;
+                musicContainer.appendChild(div);
+            });
+
+
+
+            // let div = document.createElement('div');
+            // div.id = 'content';
+            // div.innerHTML = '<p>CreateElement example</p>';
+            // document.body.appendChild(div);
+
+        }
+        
+
+
+
+      </script>
 </head>
 <body>
+    <div id="container"></div>
     <div>
         <h1>Surround is</h1>
     </div>
 
     <div>
         <h1>Music</h1>
+        <div class="musicSection">
+
+        </div>
     </div>
 
     <div>
         <h1>Adverts</h1>
+        <div class="commSection">
+            
+        </div>
     </div>
 </body>
 </html>
